@@ -14,24 +14,28 @@ class Solution {
 public:
     
     bool isCompleteTree(TreeNode* root) {
-       vector<int> v(101,0);
-        v[0] = 1;
-        v[1] = 1;
-        queue<pair<TreeNode* , int>> q;
-        q.push({root, 1});
-        //q.push({NULL,1});
+//        vector<int> v(101,0);
+//         v[0] = 1;
+//         v[1] = 1;
+//         queue<pair<TreeNode* , int>> q;
+//         q.push({root, 1});
+        queue<TreeNode*> q;
+        q.push(root);
+        bool pre = true;
         while(!q.empty())
         {
-            TreeNode* node = q.front().first;
-            int idx = q.front().second;
+            TreeNode* node = q.front();
             q.pop();
-            if(v[idx-1] == 0)
-                return false;
-            v[idx] = 1;
-            if(node->left)
-                q.push({node->left, 2*idx});
-            if(node->right)
-                q.push({node->right, 2*idx + 1});
+            if(node == NULL)
+                pre = false;
+            else{
+                if(pre == false)
+                    return false;
+                q.push(node->left);
+                q.push(node->right);
+                    
+            }
+            
         }
         return true;
     }
