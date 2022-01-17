@@ -11,22 +11,20 @@ public:
         if(sum & 1)
             return false;
         sum = sum/2;
-        vector<vector<bool>> dp(n+1, vector<bool>(sum+1,0));
-        for(int i = 0 ; i <= n ; i ++)
+        vector<bool>dp(sum+1,false);
+        dp[0] = true;
+        for(auto p : nums)
         {
-            dp[i][0] =1;
-        }
-        for(int i = 1; i< n + 1 ;i ++ )
-        {
-            for(int j = 1 ; j<= sum ;j++)
-            {   int inc = false,exc=false;
-                if(nums[i-1] <= j)
-                    inc = dp[i-1][j- nums[i-1]];
-                exc= dp[i-1][j];
-             
-                dp[i][j] = inc || exc;
+            for(int j = sum ; j>= p;j--)
+            {
+                if(j==p || dp[j-p]) 
+                {
+                    dp[j] = true;
+                    //cout<<j<<" Possible"<<endl;
+                }
+                
             }
         }
-        return dp[n][sum];
+        return dp[sum];
     }
 };
