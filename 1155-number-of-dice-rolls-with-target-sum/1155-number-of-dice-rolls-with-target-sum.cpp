@@ -1,7 +1,23 @@
 class Solution {
 public:
     int mod = 1000000007;
-    
+    int count(int n, int target, int f , vector<vector<int>>&dp)
+    {
+        if(target == 0)
+            return 1;
+        if(n == 0)
+            return 0 ;
+        if(dp[n][target])
+            return dp[n][target] - 1;
+        
+        for(int i = 1;i<=f;i++)
+        {
+            if(i <=target)
+                dp[n][target] =(dp[n][target] + count(n-1,target-i,f,dp)) % mod;
+        }
+        dp[n][target] +=1;
+        return dp[n][target];
+    }
     int numRollsToTarget(int n, int k, int target) {
         vector<vector<long int>>dp(n+1 , vector<long int >(target+1,0));
         dp[0][0] =1 ;
