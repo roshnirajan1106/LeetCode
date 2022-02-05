@@ -12,21 +12,60 @@ class Solution {
 public:
     ListNode*merge(ListNode *list1, ListNode*list2)
     {
+        ListNode* head = NULL;
+        ListNode*tail = NULL;
+        ListNode*head1 =list1;
+        ListNode* head2 = list2;
         if(list1 == NULL)
             return list2;
         if(list2 == NULL)
             return list1;
-        
-        if(list1->val <= list2->val)
-        {
-            list1->next = merge(list1->next,list2);
-            return list1;
+        while(head1 != NULL && head2 !=NULL)
+        {   
+            if(head1->val < head2->val)
+            {
+                if(head == NULL)
+                {
+                    head = tail = new ListNode(head1->val);
+                }
+                else{
+                    ListNode* node = new ListNode(head1->val);
+                    tail->next = node;
+                    tail = node;
+                }
+                head1 = head1->next;
+            }
+            else{
+                if(head == NULL)
+                {
+                    head = tail = new ListNode(head2->val);
+                }
+                else{
+                    ListNode* node = new ListNode(head2->val);
+                    tail->next = node;
+                    tail = node;
+                }
+                head2 = head2->next;
+            }
+            
         }
-        
-            list2->next = merge(list1,list2->next);
-            return list2;
-        
-    
+        while(head1 != NULL)
+        {
+             ListNode* node = new ListNode(head1->val);
+                    tail->next = node;
+                    tail = node;
+            
+            head1 = head1->next;
+        }
+         while(head2 != NULL)
+        {
+             ListNode* node = new ListNode(head2->val);
+                    tail->next = node;
+                    tail = node;
+             
+             head2= head2->next;
+        }
+        return head;
     
     }
     ListNode* mergeKLists(vector<ListNode*>& lists) {
