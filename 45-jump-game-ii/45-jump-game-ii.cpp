@@ -1,31 +1,23 @@
 class Solution {
 public:
     int jump(vector<int>& nums) {
-        int s =0;
+        int step = 1;
+        int last_jump  = nums[0];
         int n = nums.size();
-        int jump = nums[0];
         if(n == 1)
             return 0;
-        int step =0;
-        if(nums[0] >= n-1)
-            return 1;
-        while(s < n)
-        {   
-            int reach = 0;
-            for(int i = s+1;jump-- && i <n-1 ;i++)
+        int i = 1;
+        int max_reach=0;
+        while(last_jump < n-1)
+        {
+            max_reach = max(max_reach,nums[i] + i );
+            if(i == last_jump)
             {
-                if(reach < nums[i] + i)
-                {
-                    s= i;
-                    reach = nums[i]+i;
-                }
+                last_jump = max_reach;
+                step++;
             }
-            step++;
-            if(reach >= n-1)
-                return step + 1;
-            
-            jump = nums[s];
+            i++;
         }
-        return -1;
+        return step;
     }
 };
