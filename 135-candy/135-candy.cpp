@@ -2,32 +2,26 @@ class Solution {
 public:
     int candy(vector<int>& arr) {
         int n = arr.size();
-        vector<int>chocolates(n,0);
+        vector<int>chocolates(n,1);
         
-        
-        priority_queue <pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
-        for(int i = 0;i<arr.size();i++)
+        for(int i = 1;i<n;i++)
         {
-            pq.push({arr[i] , i});
+            if(arr[i-1] < arr[i])
+                chocolates[i] = chocolates[i-1] + 1;
+            
         }
         int ans = 0;
-        while(!pq.empty())
+        for(int i = n-2;i>=0;i--)
         {
-            auto top = pq.top();
-            pq.pop();
-            int idx = top.second;
-            int l = idx - 1;
-            int r = idx + 1;
-            int choco = 0;
-            if(l >= 0 && arr[l] < arr[idx])
-                choco= chocolates[l];
-            if(r <=n-1 && arr[r] < arr[idx])
-                choco = max(choco,chocolates[r]);
-            
-            chocolates[idx] = choco + 1;
-            ans += chocolates[idx];
-            
+            if(arr[i] > arr[i+1])
+            {
+                chocolates[i] = max(chocolates[i], chocolates[i+1] + 1);
+            }
         }
+        for(auto p : chocolates)
+            ans +=p;
+        
         return ans;
+        
     }
 };
