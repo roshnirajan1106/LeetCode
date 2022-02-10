@@ -1,25 +1,28 @@
 class Solution {
 public:
     int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
-        int total = 0;
-        for(int i = 0 ;i<gas.size() ;i++)
+        int sum = 0; 
+        for(int i = 0; i<gas.size();i++)
         {
-            total += gas[i]-cost[i];
+            sum += gas[i] - cost[i];
         }
-        if(total< 0)
+        if(sum < 0)
             return -1;
+        
         int start = 0;
-        int curr =0;
-        for(int i = 0 ; i<gas.size();i++)
+        int diff = 0;
+        int n = gas.size();
+        for(int i = 0;i< n-1;i++)
         {
-            curr += gas[i]-cost[i];
-            if(curr < 0)
+            diff += gas[i] - cost[i];
+            if(diff < 0)
             {
-                curr = 0 ;
-                start = i+1;
+                start = i +1;
+                diff = 0;
             }
         }
         return start;
+        
     }
 };
 //n = gas.size()
@@ -31,3 +34,6 @@ public:
 // from i - i+1, i couldnt go but there exists a solution because we already checked the total 
 // also if we know from 0 - i its a valid toour and i - i+1 is not valid and i+1 -end comes valid then
 // start from i +1 to i to i+1 because there exists a soln.
+
+
+// if total gas - cost > 0 then obviously theres a solution
