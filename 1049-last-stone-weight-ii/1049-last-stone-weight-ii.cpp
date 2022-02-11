@@ -1,34 +1,41 @@
 class Solution {
 public:
     int lastStoneWeightII(vector<int>& stones) {
-        int sum = 0;
+        int totalSum = 0;
         for(auto p : stones)
-            sum += p;
+            totalSum +=p;
         
-        int  n = stones.size();
-       vector<int> dp(sum+1,0);
-        dp[0]=1;
-       
-        for(auto p : stones)
+        int n = stones.size();
+        vector<vector<bool>>dp(n+1,vector<bool>(totalSum+1,0));
+        for(int i = 0; i<n+1;i++)
+            dp[i][0] = 1;
+        
+        for(int i = 1;i<n+1;i++)
         {
-            for(int j = sum ;j>=p;j--)
-            {
-                if(p == j || dp[j-p])
+            for(int j =1;j<totalSum+1;j++)
+            {   
+                bool inc = false;
+                bool exc  = false;
+                if(stones[i-1] <= j)
                 {
-                    dp[j] =1;
+                    inc = dp[i-1][j-stones[i-1]];
                 }
+                exc = dp[i-1][j];
+                dp[i][j] = inc | exc;
             }
         }
-        cout<<sum<<endl;
-        for(int i = 0 ; i <= sum ;i++)
-            if(dp[i] == 1)
-                cout<<i<<" ";
-        int min_sum = INT_MAX;
-        for(int i = 0;i <=sum/2;i++)
+        
+        int ans = INT_MAX;
+        for(int i = 0;i<totalSum+1;i++)
         {
-            if(dp[i] == 1)
-                min_sum= min(sum - 2*i,min_sum);
+            if(dp[n][i] == 1)
+            {
+                int diff = 2 * i - totalSum;
+                diff = abs(diff);
+                ans= min(ans, diff);
+            }
         }
-        return min_sum;
+        return ans;
+        
     }
 };
