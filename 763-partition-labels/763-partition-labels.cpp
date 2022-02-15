@@ -1,34 +1,34 @@
 class Solution {
 public:
     vector<int> partitionLabels(string s) {
-        vector<int>num(26,-1);
-        for(int i = 0;i<s.length();i++)
+        vector<int>nums(26,0);
+        for(int i = 0; i<s.length();i++)
         {
-            int ch = s[i] - 'a';
-            num[ch]= i;
+            int n = s[i]-'a';
+            nums[n] = i;
         }
+        for(auto p :nums)
+            cout<<p<<" ";
         int i = 0;
-        vector<int> res;
-        while(i < s.length())
+        vector<int>res;
+        int n = s.length();
+        while(i < n)
         {   
-            int last_i = 0;
-            int size = 0;
-            int element = s[i]-'a';
-            cout<<s[i]<<" : "<<num[element]<<endl;
-            last_i = num[element];
-            for(int j = i;j<= last_i ; j++)
-            {   
+            int num =  s[i] -'a';
+            int max_i = nums[num];
+            int j = i+1;
+            while(j < max_i)
+            {
+                 num = s[j]-'a';
+                max_i = max(max_i,nums[num]);
+                j++;
                 
-                int p = s[j] - 'a';
-                last_i = max(last_i, num[p]);
             }
-            size = last_i - i + 1;
-         res.push_back(size);
-            i = last_i+1;
-            
-           
+            res.push_back(max_i-i+1);
+            i = max_i + 1;
             
         }
         return res;
+        
     }
 };
