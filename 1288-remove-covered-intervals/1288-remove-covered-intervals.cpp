@@ -7,21 +7,14 @@ public:
     int removeCoveredIntervals(vector<vector<int>>& intervals) {
        sort(intervals.begin(),intervals.end(),comp);
        int n =intervals.size();
-        for(int i = n-2;i>=0;i--)
+        int count = 0;
+        int end = intervals[0][1];
+        for(int i = 1;i< n;i++ )
         {
-            for(int j = i+1;j<n;j++)
-            {
-                if(intervals[j][0] >= intervals[i][0] && intervals[i][1] >= intervals[j][1]) 
-                {
-                    intervals.erase(intervals.begin() + j);
-                    n = intervals.size();
-                    cout<<"hello"<<endl;
-                    cout<<j<<endl;
-                    j = i;
-                }
-            }
+            if(intervals[i][1] <= end)
+                count ++;
+            end=max(end,intervals[i][1]);
         }
-        return intervals.size();
-        
+        return n - count;
     }
 };
