@@ -39,8 +39,8 @@ public:
     }
     vector<TreeNode*> allPossibleFBT(int n) {
         vector<TreeNode*>ans;
-        if(n % 2 == 0)
-            return ans;
+        // if(n % 2 == 0)
+        //     return ans;
         return helper(n);
     }
 };
