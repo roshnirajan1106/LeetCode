@@ -10,27 +10,72 @@
  */
 class Solution {
 public:
-    ListNode*merge(ListNode*l1, ListNode*l2)
-    {
-        if(l1 == NULL)
-            return l2;
-        if(l2 == NULL)
-            return l1;
-        
-        ListNode*l;
-        if(l1->val < l2->val)
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        ListNode*l =NULL;
+        ListNode*prev =NULL;
+        while(list1 != NULL && list2 != NULL)
         {
-            l = new ListNode(l1->val);
-            l->next = merge(l1->next,l2);
+            if(list1->val < list2->val)
+            {
+                if(l == NULL)
+                {
+                    l = new ListNode(list1->val);
+                    prev = l;
+                }
+                    
+                else{
+                    ListNode* node = new ListNode(list1->val);
+                    prev->next= node;
+                    prev = node;
+                }
+                list1 = list1->next;
+                    
+            }
+            else{
+                if(l == NULL)
+                {
+                    l = new ListNode(list2->val);
+                    prev = l;
+                }
+                    
+                else{
+                    ListNode* node = new ListNode(list2->val);
+                    prev->next= node;
+                    prev = node;
+                }
+                  list2 = list2->next;
+            }
         }
-        else
+        while(list1)
         {
-            l = new ListNode(l2->val);
-            l->next = merge(l1,l2->next);
+            if(l == NULL)
+                {
+                    l = new ListNode(list1->val);
+                    prev = l;
+                }
+                    
+                else{
+                    ListNode* node = new ListNode(list1->val);
+                    prev->next= node;
+                    prev = node;
+                }
+              list1 = list1->next;
+        }
+        while(list2)
+        {
+                 if(l == NULL)
+                {
+                    l = new ListNode(list2->val);
+                    prev = l;
+                }
+                    
+                else{
+                    ListNode* node = new ListNode(list2->val);
+                    prev->next= node;
+                    prev = node;
+                }
+            list2 = list2->next;
         }
         return l;
-    }
-    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
-        return merge(list1,list2);
     }
 };
