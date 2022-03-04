@@ -10,26 +10,14 @@
  */
 class Solution {
 public:
-    void decimal(ListNode*head, int &pow,int &ans)
-    {
-        if(head == NULL)
-            return ;
-        decimal(head->next, pow,ans);
-        if(head->val == 1)
-        {
-            int num = 1<<pow;
-            ans += num;
-            
-        }
-        pow= pow+1;
-            
-        
-        
-    }
     int getDecimalValue(ListNode* head) {
         int ans =0;
-        int pow = 0;
-         decimal(head,pow,ans);
+        while(head)
+        {
+            ans = ans << 1;
+            ans |= head->val;
+            head= head->next;
+        }
         return ans;
     }
 };
