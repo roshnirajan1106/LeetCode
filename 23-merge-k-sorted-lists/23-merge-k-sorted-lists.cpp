@@ -10,72 +10,34 @@
  */
 class Solution {
 public:
-    ListNode*merge(ListNode *list1, ListNode*list2)
+    ListNode*merge(ListNode*l1,ListNode*l2)
     {
-        ListNode* head = NULL;
-        ListNode*tail = NULL;
-        ListNode*head1 =list1;
-        ListNode* head2 = list2;
-        if(list1 == NULL)
-            return list2;
-        if(list2 == NULL)
-            return list1;
-        while(head1 != NULL && head2 !=NULL)
-        {   
-            if(head1->val < head2->val)
-            {
-                if(head == NULL)
-                {
-                    head = tail = new ListNode(head1->val);
-                }
-                else{
-                    ListNode* node = new ListNode(head1->val);
-                    tail->next = node;
-                    tail = node;
-                }
-                head1 = head1->next;
-            }
-            else{
-                if(head == NULL)
-                {
-                    head = tail = new ListNode(head2->val);
-                }
-                else{
-                    ListNode* node = new ListNode(head2->val);
-                    tail->next = node;
-                    tail = node;
-                }
-                head2 = head2->next;
-            }
-            
-        }
-        while(head1 != NULL)
+        if(l1 == NULL )
+            return l2;
+        if(l2 == NULL)
+            return l1;
+        
+        ListNode* node = NULL;
+        if(l1->val < l2->val)
         {
-             ListNode* node = new ListNode(head1->val);
-                    tail->next = node;
-                    tail = node;
-            
-            head1 = head1->next;
+            node = new ListNode(l1->val);
+            node->next = merge(l1->next,l2);
         }
-         while(head2 != NULL)
-        {
-             ListNode* node = new ListNode(head2->val);
-                    tail->next = node;
-                    tail = node;
-             
-             head2= head2->next;
+        else{
+            node = new ListNode(l2->val);
+            node->next= merge(l1,l2->next);
         }
-        return head;
-    
+        return node;
     }
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         if(lists.size() == 0)
             return NULL;
+        
         while(lists.size() > 1)
         {
-            ListNode * node = merge(lists[0],lists[1]);
-            lists.erase(lists.begin());
-            lists.erase(lists.begin());
+            ListNode*node = merge(lists[0] ,lists[1] );
+            lists.erase(lists.begin() );
+            lists.erase(lists.begin() );
             lists.push_back(node);
         }
         return lists[0];
