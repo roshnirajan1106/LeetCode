@@ -1,24 +1,33 @@
 class Solution {
 public:
-    void para(int count_of_open,int count_of_close,string str, vector<string> & ans, int n)
+    void para(int countopen,int countclose,int n, string &res,vector<string>&ans)
     {
-        if(count_of_open > n)
-            return ;
-        if(count_of_close == n)
+        if(countclose == n)
         {
-            ans.push_back(str);
-            return ;
+            ans.push_back(res);
+                return ;
         }
-        if(count_of_open > count_of_close)
-            para(count_of_open, count_of_close +1 , str + ')' , ans, n);
-        para(count_of_open + 1,count_of_close, str + '(' , ans, n);
+        if(countopen < n)
+        {
+            res.push_back('(');
+            para(countopen+1,countclose,n,res ,ans);
+            res.pop_back();
+        }
+            
+        if(countclose < countopen)
+        {
+            res.push_back(')');
+            para(countopen, countclose+1,n,res ,ans);
+            res.pop_back();
+        }
+        
+        
+        
     }
     vector<string> generateParenthesis(int n) {
-        int count_of_open = 0;
-        int count_of_close= 0;
-        string str = "";
-        vector<string> ans;
-        para(count_of_open,count_of_close, str, ans,n);
+        vector<string>ans;
+        string res="";
+        para(0,0,n,res,ans);
         return ans;
     }
 };
