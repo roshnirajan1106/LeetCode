@@ -1,32 +1,50 @@
 class Solution {
 public:
-    void dfs(map<int,vector<int>>&graph, int src, vector<int>&visited)
+    int find(int i, vector<int>&parent)
     {
-        visited[src] =1;
-        for(auto p: graph[src])
-        {   if(visited[p] == 0)
-                dfs(graph, p, visited);
+        if(parent[i] == -1)
+            return i;
+        return parent[i] = find(parent[i],parent);
+    }
+    void unionset(int i,int j, vector<int>&parent, vector<int>&rank)
+    {
+        int s1 = find(i,parent);
+        int s2 = find(j,parent);
+        if(s1 == s2)
+            return ;
+        
+        
+        if(rank[s1] > rank[s2])
+        {
+            parent[s2] = s1;
+            rank[s1] += rank[s2];
+        }
+        else
+        {
+            parent[s1] = s2;
+            rank[s2] += rank[s1];
         }
     }
     int makeConnected(int n, vector<vector<int>>& connections) {
-        vector<int> visited(n,0);
-        if(n-1 > connections.size())
+         int m = connections.size();
+        if(n > m + 1)
             return -1;
-        map<int,vector<int>> graph;
-        for(auto p : connections)
+        
+        vector<int>parent(n,-1);
+        vector<int>rank(n,1);
+        for(int i = 0;i<m;i++)
         {
-            graph[p[0]].push_back(p[1]);
-            graph[p[1]].push_back(p[0]);
+            int src = connections[i][0];
+            int dest = connections[i][1];
+            unionset(src,dest,parent,rank);
         }
-        int cnt =0 ;
-        for(int i = 0;i<visited.size();i++)
+        int count= 0;
+        for(auto p : parent)
         {
-            if(visited[i] == 0)
-            {
-                dfs(graph,i, visited);
-                cnt++;
-            }
+            if(p == -1)
+                count++;
         }
-        return cnt-1;
+        
+        return count-1;
     }
 };
