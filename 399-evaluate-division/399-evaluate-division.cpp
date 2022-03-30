@@ -1,58 +1,68 @@
 class Solution {
 public:
-    double bfs(map<string,vector<pair<string,double>>> &graph,string src, string dest,map<string,int>visited)
-    {
-       queue<pair<string,double>>q;
+    double bfs(string src, string dest,map<string,vector<pair<string,double>>>&graph,map<string,int>visited){
+        queue<pair<string,double>>q;
         q.push({src,1});
+        cout<<src<<" "<<dest<<endl;
         while(!q.empty())
         {
-            pair<string,double> top =q.front();
-            cout<<top.first<<" --> ";
-            q.pop();
-            visited[top.first] = 1;
-            if(top.first == dest)
-                return top.second;
-            for(auto p : graph[top.first])
+            int size = q.size();
+            while(size--)
             {
-                if(visited[p.first] ==0)
-                {   cout<<p.first<<" "<<p.second*top.second<<endl;
-                    q.push({p.first, p.second*top.second});
+                auto top = q.front();
+                q.pop();
+                
+                string s = top.first;
+                visited[s] = 1;
+                double div = top.second;
+                if(s == dest)
+                {
+                    return div;
+                }
+                
+                for(auto p :graph[s])
+                {
+                    if(visited[p.first] == 0)
+                        q.push({p.first,p.second*div});
+                        
                 }
             }
         }
         return -1;
+        
     }
     vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
-        vector<double>output;
-        unordered_set<string> words;
-        map<string,int> visited;
-        map<string,vector<pair<string,double>>> graph;
-        int n =equations.size();
-        for(int i = 0;i<n;i++)
+        map<string,vector<pair<string,double>>>graph;
+        map<string,int>visited;
+        for(int i = 0;i<equations.size();i++)
         {
-            string src = equations[i][0];
-            string dest =equations[i][1];
-            double value = values[i];
-            words.insert(src);
-            words.insert(dest);
-            visited[src] = 0;
-            visited[dest]=0;
-            graph[src].push_back({dest,value});
-            graph[dest].push_back({src, 1/value});
+            string s = equations[i][0];
+            string d = equations[i][1];
+            graph[s].push_back({d,values[i]});
+            graph[d].push_back({s,1/values[i]});
+            visited[s] = 0;
+            visited[d] = 0;
         }
-        for(int i = 0;i<queries.size();i++)
+        vector<double>res;
+        for(auto p : queries)
         {
-            string src  = queries[i][0];
-            string dest = queries[i][1];
-            if(words.find(src) == words.end() || words.find(dest) == words.end())
-            {   double ans = -1;
-                output.push_back(ans);
+            string s = p[0];
+            string d = p[1];
+            double ans ;
+            if(visited.find(s) == visited.end() || visited.find(d) == visited.end())
+            {
+                ans = -1;
             }
-            else{
-                double ans = bfs(graph, src,  dest,visited);
-                output.push_back(ans);
-            }
+            
+            else if(s == d)
+                ans = 1;
+            else
+                ans = bfs(s,d,graph,visited);
+            
+            res.push_back(ans);
+                
         }
-        return output;
+        return res;
+        
     }
 };
