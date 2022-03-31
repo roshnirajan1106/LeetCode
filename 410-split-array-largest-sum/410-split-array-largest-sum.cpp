@@ -1,45 +1,55 @@
 class Solution {
 public:
-    int find(int m, int s, int e, int n,vector<int>&csum,int dp[51][1001])
+    bool find(vector<int>&nums,int sum, int m)
     {
-        if(m == 1)
+        int s = 0;
+        int count = 1;
+        for(int i = 0;i<nums.size();i++)
         {
-            return dp[m][e] = csum[n-1] - csum[s];
-        }
-        if(e == n-1)
-        {
-            return dp[m][e] = csum[e];
-        }
-        if(dp[m][e] != -1)
-            return dp[m][e];
-        int finalAns = INT_MAX;
-        for(int i = e;i<n-1;i++)
-        {
-            int sum = csum[i]-csum[s];
-            int t =  find(m-1,i,i+1,n,csum,dp);
             
-            int ans =max(sum,t);
-            finalAns = min(finalAns,ans);
+            if(nums[i] > sum)
+                return false;
+                
+            if(s + nums[i] > sum)
+            {
+                s = nums[i];
+                count++;
+                if(count > m)
+                    return false;
+            }
+            else
+                s += nums[i];
         }
-        return dp[m][e] = finalAns;
+       
+        return true;
     }
     int splitArray(vector<int>& nums, int m) {
-        vector<int>csum ;
-        csum.push_back(0);
-        csum.push_back(nums[0]);
-        int sum = nums[0];
-        if(nums.size() == 1)
-            return nums[0];
-        int dp[51][1001];
-        memset(dp,-1,sizeof(dp));
-        for(int i = 1;i<nums.size();i++)
+        int sum = 0;
+        int minimum = INT_MAX;
+        for(auto p : nums)
         {
-            
-            sum+= nums[i];
-            csum.push_back(sum);
+            sum += p;
+            minimum = min(minimum, p);
         }
-        int n = csum.size();
-        int  ans = find(m,0,1,n,csum,dp);
-        return ans;
+        
+        int s = 0;
+        int e = sum;
+        int res;
+        while(s <= e)
+        {
+            int mid = s + (e-s)/2;
+            cout<<mid<<" :";
+            bool ans = find(nums,mid,m);
+            cout<<ans<<endl;
+            if(ans == true)
+            {
+                res = mid;
+                e = mid-1;
+            }
+            else
+                s = mid+1;
+        }
+        
+        return res;
     }
 };
