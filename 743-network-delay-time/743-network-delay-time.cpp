@@ -1,44 +1,53 @@
 class Solution {
 public:
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-        set<pair<int,int>>pq;
-        vector<int> time(n+1,INT_MAX);
-        time[k] = 0;
+        //src = 0;
+        //all the nodes excpet src = infinut
+        set<pair<int,int>>s;
+        vector<int>dist(n+1,INT_MAX);
         map<int,vector<pair<int,int>>>graph;
-        for(auto p : times)
+        for(auto p :times)
         {
-            graph[p[0]].push_back({p[1], p[2]});
+            int src = p[0];
+            int dest =p[1];
+            int wt= p[2];
+            graph[src].push_back({dest,wt});
         }
-        pq.insert({0,k});
-        while(!pq.empty())
+       
+        dist[k] = 0;
+        s.insert({0,k});
+        while(!s.empty())
         {
-            pair<int,int> top = *(pq.begin());
-            pq.erase(pq.begin());
-            int src= top.second;
-            int d =top.first;
+            auto top = *s.begin();
+            s.erase(s.begin());
+            int node = top.second;
+            int dis = top.first;
             
-            for(auto p : graph[src])
-            {
-                int nbr=p.first;
-                int dist = p.second;
-                if(dist + d < time[nbr])
+            for(auto p : graph[node]){
+                int nbr = p.first;
+                int wt = p.second;
+                if(dis + wt < dist[nbr])
                 {
-                    if(pq.find({time[nbr], nbr}) != pq.end())
-                    {
-                        pq.erase(pq.find({time[nbr], nbr}));
-                    }
-                    time[nbr]=  dist +d;
-                    pq.insert({time[nbr],nbr});
+                    if(s.find(make_pair(dist[nbr],nbr)) != s.end())
+                        s.erase(s.find(make_pair(dist[nbr],nbr)));
+                    
+                    dist[nbr] = dis + wt;
+                    s.insert({dist[nbr],nbr});
                 }
+                
             }
+            
+            
         }
-        int ans = 0;
+        int maximum = INT_MIN;
         for(int i = 1;i<=n;i++)
         {
-            if(time[i] == INT_MAX)
+            if(dist[i] == INT_MAX)
                 return -1;
-            ans = max(ans, time[i]);
+            
+            maximum = max(maximum,dist[i]);
+                
         }
-        return ans;
+        return maximum;
     }
 };
