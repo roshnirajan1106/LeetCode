@@ -18,6 +18,7 @@ public:
                 return v;
             
         }
+        stack[src]  =0;
         ans.push_back(src);
         return ans;
         
@@ -62,10 +63,23 @@ public:
         vector<int>v;
         vector<int>visited(numCourses,0);
         vector<int>stack(numCourses,0);
-        
-        vector<int>ans1 = bfs(graph,indegree,numCourses);
-        if(ans1.size() == numCourses)
-            return ans1;
-        return v;
+        vector<int>ans;
+        vector<int>ans1;
+        // vector<int>ans1 = bfs(graph,indegree,numCourses);
+         for(int i = 0;i<numCourses;i++)
+        {
+            if(visited[i] == 0){
+                
+            cout<<i<<"--> ";
+            ans1 = dfs(i,graph,visited,stack,ans);
+            
+            if(ans1.size() == 0)
+                {
+                cout<<ans1.size()<<endl;
+                return v;}
+                }
+        }
+        reverse(ans.begin(),ans.end());
+        return ans;
     }
 };
