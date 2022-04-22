@@ -9,37 +9,34 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-class node{
+class Pair{
     public:
+    int height;
     bool balanced;
-    int height ;
+    Pair(){
+        height = 0;
+        balanced = true;
+    }
 };
 class Solution {
 public:
-    node  balanced(TreeNode*root)
+    Pair balance(TreeNode*root)
     {
-        node n ;
-        if(root== NULL)
-        {
-            n.height = 0;
-            n.balanced= true;
-             return n ;
-            
-        }
-           
-        node left = balanced(root->left);
-        node right = balanced(root->right);
-        if(abs(left.height-right.height) <=1 && left.balanced && right.balanced && balanced(root->left).balanced && balanced(root->right).balanced){
-            n.height = max(left.height,right.height) + 1;
-            n.balanced= true;
-            return n;
-        }
-        n.height = max(left.height,right.height) + 1;
-        n.balanced = false;
-        return n;
+        Pair p;
+        if(root == NULL)
+            return p;
+        Pair left = balance(root->left);
+        Pair right = balance(root->right);
+        if(abs(left.height- right.height) <= 1 && left.balanced && right.balanced)
+            p.balanced = true;
+        else
+            p.balanced = false;
+        
+        p.height = max(left.height,right.height) + 1;
+        return p;
     }
     bool isBalanced(TreeNode* root) {
-        node n = balanced(root);
-        return n.balanced;
+        Pair p = balance(root);
+        return p.balanced;
     }
 };
