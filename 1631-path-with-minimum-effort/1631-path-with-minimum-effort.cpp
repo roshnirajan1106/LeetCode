@@ -1,78 +1,41 @@
 class Solution {
 public:
     int minimumEffortPath(vector<vector<int>>& heights) {
-       set<pair<int,pair<int,int>>>pq;
-        pq.insert({0,{0,0}});
+        set<pair<int,pair<int,int>>>s;
         int m = heights.size();
-        int n =heights[0].size();
-        vector<vector<int>>dist(m, vector<int>(n,INT_MAX));
-        //vector<vector<int>>max_value(m,vector<int>(n,INT_MIN));
-        //max_value[0][0] = 0;
-        dist[0][0] = 0;
-        while(!pq.empty())
+        int n = heights[0].size();
+        s.insert({0,{0,0}});
+        vector<vector<int>>res(m,vector<int>(n,INT_MAX));
+        vector<int>xx = {-1,0,1,0};
+        vector<int>yy = {0,1,0,-1};
+        while(!s.empty())
         {
-            auto  top = *(pq.begin());
-            pq.erase(pq.begin());
-            int effort = top.first;
+            auto top = *s.begin();
+            s.erase(s.begin());
+            int val = top.first;
             int x = top.second.first;
-            int y =top.second.second;
+            int y = top.second.second;
+            res[x][y] = val;
+            if(x == m-1 && y == n-1 )
+                return val;
             
-            if(x == m-1 && y == n-1)
-                return effort;
-             
-            //go left
-            if(x> 0)
+            for(int k =0;k <4;k++)
             {
-                int xx = x-1;
-                int yy = y;
-                int nd = max(abs(heights[x][y] - heights[xx][yy]),effort);
-                if(dist[xx][yy] >nd){
-                    dist[xx][yy] = nd;
-                    pq.insert({dist[xx][yy],{xx,yy}});
-                   // max_value[xx][yy] = max(max_value[xx][yy], max_)
-                }
+                int i = x + xx[k];
+                int j = y + yy[k];
+                
+                if(i > m-1  || j > n-1 || i < 0 || j < 0 )
+                    continue;
+                int result = abs(heights[i][j] - heights[x][y]) ;
+                result = max(result,val);
+                
+                if(result < res[i][j])
+                    s.insert({result,{i,j}});
+                
+                
+                
             }
-             if(y> 0)
-            {
-                int xx = x;
-                int yy = y-1;
-                int nd = max(abs(heights[x][y] - heights[xx][yy]),effort);
-                if(dist[xx][yy] >nd){
-                    dist[xx][yy] = nd;
-                    pq.insert({dist[xx][yy],{xx,yy}});
-                   // max_value[xx][yy] = max(max_value[xx][yy], max_)
-                }
-            }
-             if(x<m-1)
-            {
-                int xx = x+1;
-                int yy = y;
-                int nd = max(abs(heights[x][y] - heights[xx][yy]),effort);
-                if(dist[xx][yy] >nd){
-                    dist[xx][yy] = nd;
-                    pq.insert({dist[xx][yy],{xx,yy}});
-                   // max_value[xx][yy] = max(max_value[xx][yy], max_)
-                }
-            }
-             if(y<n-1)
-            {
-                int xx = x;
-                int yy = y+1;
-                int nd = max(abs(heights[x][y] - heights[xx][yy]),effort);
-                if(dist[xx][yy] >nd){
-                    dist[xx][yy] = nd;
-                    pq.insert({dist[xx][yy],{xx,yy}});
-                   // max_value[xx][yy] = max(max_value[xx][yy], max_)
-                }
-            }
-            
-            
-            
         }
         return 0;
     }
-                            
-            
-     
-    };
-
+};
