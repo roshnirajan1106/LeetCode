@@ -1,33 +1,34 @@
 class Solution {
 public:
-     bool dfs(vector<vector<int>>&graph , int src, vector<int>&visited,int c)
+    bool bipar(int color,int src, vector<vector<int>>& graph,vector<int>&visited)
     {
-        visited[src] = c;
+        visited[src]= color;
         for(auto p :graph[src])
         {
-            if(visited[p] == 0)
+            if(visited[p] == -1)
             {
-                bool ans = dfs(graph,p, visited, 3-c);
-                if(!ans)
+                bool ans = bipar(3-color,p,graph,visited);
+                if(ans == false)
                     return false;
-                
-                    
+
             }
-            if(visited[p] == visited[src])
+            else if(visited[p] == visited[src])
+            {
                 return false;
+            }
+            
         }
         return true;
     }
     bool isBipartite(vector<vector<int>>& graph) {
-         
-       int n= graph.size();
-        vector<int>visited(n,0);
-        bool ans;
-        for(int i = 0;i<n;i++)
+        int n = graph.size();
+        vector<int>visited(n,-1);
+        bool ans = true;
+         for(int i = 0;i<n;i++)
         {
-            if(visited[i] == 0)
+            if(visited[i] == -1)
             {
-                ans = dfs(graph,i,visited,1);
+                ans = bipar(1,i,graph,visited);
                 if(ans == false)
                     return false;
             }
