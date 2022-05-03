@@ -1,19 +1,29 @@
 class Solution {
 public:
-   
+    int find(int i, int n, vector<int>&nums,int target,int &sum,vector<int>&dp)
+    {
+        
+        if(sum == target)
+            return 1;
+        if(sum  > target || i == n)
+            return 0;
+        if(dp[sum] != -1)
+            return dp[sum];
+     int count = 0;   
+    for(int i = 0;i<n;i++)
+    {
+        sum = sum + nums[i];
+        count += find(i,n,nums,target,sum,dp);
+        sum = sum -nums[i];
+        
+    }
+    return dp[sum] =  count;
+        
+    }
     int combinationSum4(vector<int>& nums, int target) {
-        vector<long int>dp(target+1,0);
-        dp[0] =1;
-        for(int i = 1;i<=target;i++)
-        {   int x =0;
-            for(int j = 0 ;j<nums.size();j++)
-            {   
-                if(i >= nums[j])
-                    x += dp[i-nums[j]];
-            }
-         dp[i] = x;
-        }
-        int ans = dp[target];
-        return ans;
+        int n = nums.size();
+        int sum = 0;
+        vector<int>dp(target + 1,-1);
+        return find(0,n,nums,target,sum,dp);
     }
 };
