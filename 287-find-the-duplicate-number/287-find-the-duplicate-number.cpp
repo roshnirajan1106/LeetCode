@@ -5,10 +5,8 @@ public:
         {
             if(nums[abs(nums[i])] < 0)
                 return abs(nums[i]);
-            
             nums[abs(nums[i])] = nums[abs(nums[i])]*-1;
         }
-        
         return -1;
     }
 };
