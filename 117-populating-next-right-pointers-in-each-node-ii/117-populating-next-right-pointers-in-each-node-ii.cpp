@@ -18,39 +18,38 @@ public:
 
 class Solution {
 public:
-    void bfs(Node*&root)
-    {
+    Node* connect(Node* root) {
         queue<Node*>q;
+        if(root== NULL)
+            return NULL;
         q.push(root);
+        Node*prev = NULL;
         while(!q.empty())
         {
             int size = q.size();
-            Node*prev = NULL;
             while(size--)
             {
-                Node*top= q.front();
+                auto top = q.front();
                 q.pop();
                 if(prev == NULL)
-                    prev = top;
-                else
                 {
-                    prev->next =top;
-                    prev = top;
+                    //do nothing
                 }
+                else
+                    prev->next = top;
+                
+                prev = top;
+                
+                
                 if(top->left)
                     q.push(top->left);
                 if(top->right)
                     q.push(top->right);
             }
-            prev->next= NULL;
+            if(prev)
+            prev->next = NULL;
+            prev = NULL;
         }
-        
-    }
-    Node* connect(Node* root) {
-        if(root == NULL)
-            return root;
-    
-        bfs(root);
         return root;
     }
 };
