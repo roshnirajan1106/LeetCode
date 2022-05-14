@@ -1,53 +1,54 @@
 class Solution {
 public:
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-        //src = 0;
-        //all the nodes excpet src = infinut
-        set<pair<int,int>>s;
-        vector<int>dist(n+1,INT_MAX);
+        //map<int,int>times;
+        vector<int>visited;
+        map<int,int>dist;
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
+
+        pq.push({0,k});
         map<int,vector<pair<int,int>>>graph;
-        for(auto p :times)
+        for(int i = 0;i<times.size();i++)
         {
-            int src = p[0];
-            int dest =p[1];
-            int wt= p[2];
-            graph[src].push_back({dest,wt});
+            int src = times[i][0];
+            int dest = times[i][1];
+            int d = times[i][2];
+            graph[src].push_back({dest,d});
+            
         }
-       
+        for(int i =1;i<=n;i++)
+        {
+            dist[i] = INT_MAX;
+        }
         dist[k] = 0;
-        s.insert({0,k});
-        while(!s.empty())
+        while(!pq.empty())
         {
-            auto top = *s.begin();
-            s.erase(s.begin());
+            auto top = pq.top();
+            pq.pop();
+            int distance = top.first;
             int node = top.second;
-            int dis = top.first;
-            
-            for(auto p : graph[node]){
-                int nbr = p.first;
-                int wt = p.second;
-                if(dis + wt < dist[nbr])
+            for(auto p : graph[node])
+            {
+                int neigh=p.first;
+                int diff = p.second;
+                if(distance +  diff < dist[neigh])
                 {
-                    if(s.find(make_pair(dist[nbr],nbr)) != s.end())
-                        s.erase(s.find(make_pair(dist[nbr],nbr)));
-                    
-                    dist[nbr] = dis + wt;
-                    s.insert({dist[nbr],nbr});
+                    dist[neigh] = distance + diff;
+                    pq.push({dist[neigh],neigh});
                 }
-                
+                else
+                    continue;
             }
-            
-            
         }
-        int maximum = INT_MIN;
-        for(int i = 1;i<=n;i++)
+        int ans = INT_MIN;
+        for(auto p : dist)
         {
-            if(dist[i] == INT_MAX)
+            if(p.second == INT_MAX)
                 return -1;
             
-            maximum = max(maximum,dist[i]);
-                
+            ans = max(ans,p.second);
         }
-        return maximum;
+        
+        return ans;
     }
 };
