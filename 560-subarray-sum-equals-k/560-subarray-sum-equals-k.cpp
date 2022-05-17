@@ -1,26 +1,25 @@
 class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {
-      map<int,int> m;
-        m[0] = 1;
-        for(int i =1;i<nums.size();i++)
-            nums[i] +=nums[i-1];
-        
+        map<int,int>csum;
+        int sum = 0;
         int ans = 0;
-        for(int i = 0;i<nums.size();i++)
+        for(int i =0;i<nums.size();i++)
         {
-            int diff = nums[i] - k;
-            if(m.find(diff) != m.end())
+            sum +=nums[i];
+            if(csum.find(sum-k) != csum.end() )
             {
-                ans += m[diff];
-                
+                ans += csum[sum-k];
             }
-            if(m.find(nums[i]) == m.end())
-                m[nums[i]] = 1;
-            else
-                m[nums[i]]++;
+            if(sum == k)
+                ans +=1;
+            if(csum.find(sum) == csum.end())
+            {
+                csum[sum] = 1;
+            }
+            else if(csum.find(sum) !=csum.end())
+                csum[sum]++;
         }
         return ans;
-        
     }
 };
