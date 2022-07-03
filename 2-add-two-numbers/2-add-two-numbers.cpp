@@ -10,34 +10,76 @@
  */
 class Solution {
 public:
-    ListNode* add(ListNode*l1,ListNode*l2, int c)
+    int length(ListNode*l1)
     {
-        if(l1 == NULL && l2 == NULL)
-        {
-                if( c== 0)
-                    return NULL;
-                return new ListNode(c);
-        }
-           
-        int ans = c;
-        if(l1)
-        {
-            ans += l1->val;
-            l1 = l1->next;
-        }
-        if(l2)
-        {
-            ans += l2->val;
-            l2 = l2->next;
-        }
-        
-        int num =ans %10;
-        ans = ans  / 10;
-        ListNode *node = new ListNode(num);
-        node->next = add(l1,l2,ans);
-        return node;
+        if(l1 == NULL)
+            return 0;
+        return 1 + length(l1->next);
     }
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        return add(l1,l2,0);
+        int m = length(l1);
+        int n =length(l2);
+        ListNode*head;
+        int rem = 0;
+        if(m > n)
+        {
+            head=l1;
+            ListNode*prev; 
+            while(l2!= NULL)
+            {
+                int sum = l1->val + l2->val + rem;
+                l1->val = sum % 10;
+                rem = sum/10;
+                prev = l1;
+                l1= l1->next;
+                l2 = l2->next;
+            }
+            while(l1 != NULL)
+            {
+                int sum = l1->val + rem;
+                l1->val = sum % 10;
+                rem = sum /10;
+                prev = l1;
+                l1 = l1->next;
+            }
+            if(rem != 0)
+            {
+                ListNode*n = new ListNode(rem);
+                prev->next = n;
+            }
+                
+        }
+        
+        else{
+            ListNode*temp = l1;
+        l1 = l2;
+        l2 = temp; 
+            head=l1;
+            ListNode*prev; 
+            while(l2!= NULL)
+            {
+                int sum = l1->val + l2->val + rem;
+                l1->val = sum % 10;
+                rem = sum/10;
+                prev = l1;
+                l1= l1->next;
+                l2 = l2->next;
+            }
+            while(l1 != NULL)
+            {
+                int sum = l1->val + rem;
+                l1->val = sum % 10;
+                rem = sum /10;
+                prev = l1;
+                l1 = l1->next;
+            }
+            if(rem != 0)
+            {
+                ListNode*n = new ListNode(rem);
+                prev->next = n;
+            }
+        }
+        return head;
+        
     }
 };
