@@ -18,37 +18,32 @@ class Solution {
 public:
     Node* copyRandomList(Node* head) {
         map<Node*,Node*>m;
-        Node*newHead = NULL;
-        Node*prev  = NULL;
-        Node *temp = head;
-        while(head)
+        map<Node*,Node*>m1;
+        Node* newHead = NULL;
+        Node *prev ;
+        while(head != NULL)
         {
+            Node* temp = new Node(0);
+            
+            temp->val = head->val;
             if(newHead == NULL)
-            {
-                newHead = new Node(head->val);
-                prev = newHead;
-                m[head] = newHead;
-            }
+                newHead = temp;
             else{
-                Node * node = new Node(head->val);
-                prev->next = node;
-                prev = node;
-                m[head] = node;
+                prev->next = temp;
+
             }
+            prev = temp;
+            m[temp] = head;
+            m1[head] = temp;
             head = head->next;
+            
         }
-        Node* Head = newHead;
-        while(temp)
+        Node*temp = newHead;
+        while(temp != NULL)
         {
-            Node*x = m[temp->random];
-           
-            Head->random = x;
-            
-            Head = Head->next;
-            temp = temp ->next;
-            
+            temp->random = m1[m[temp]->random];
+            temp = temp->next;
         }
         return newHead;
-        
     }
 };
