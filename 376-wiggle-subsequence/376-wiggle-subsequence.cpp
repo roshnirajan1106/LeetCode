@@ -1,60 +1,50 @@
 class Solution {
 public:
     int wiggleMaxLength(vector<int>& nums) {
-        vector<int>dp(nums.size() , 1);
-        vector<int>flag(nums.size(),3);
         int n = nums.size();
-        if(n == 1)
-            return 1;
+        vector<pair<int ,int>>res(n);
+        res[0].first = 0;
+        res[0].second= 2;
         
-        int i = 1;
-        while(i<n && nums[i] == nums[i-1])
-            i++;
-        if(i == n)
-            return 1;
-        
-        int ans = 0;
-        for(int j = i ;j<n;j++)
-        {
-            for(int k = 0; k<j;k++)
+        int maximum =0;
+        for(int i = 1;i<n;i++){
+            for(int j = i-1;j>=0;j--)
             {
-                int diff = nums[j] - nums[k];
+                int diff = nums[i]-nums[j];
                 if(diff == 0)
                     continue;
-                if(flag[k] == 3)
+                //cout<<i<<" "<<j<<" "<<res[j].second<<endl;
+                if(res[j].second == 2 && res[i].first < res[j].first + 1)
                 {
-                    if(dp[j] < dp[k] + 1)
+                    cout<<j<<endl;
+                    if(diff > 0)
                     {
-                        dp[j] = dp[k] +1;
-                        if(diff > 0)
-                            flag[j] = 1;
-                        else
-                            flag[j] = 2;
+                        res[i].first = 1;
+                        res[i].second = 1;
                     }
-                
-                }
-                    
-                else if(flag[k] == 2 && diff > 0 )
-                { 
-                    if(dp[j] < dp[k] + 1)
-                    {
-                        dp[j] = dp[k]  + 1;
-                        flag[j] = 1;
+                    else{
+                        res[i].first = 1;
+                        res[i].second = 0;
                     }
                 }
-                else if( flag[k] == 1 && diff < 0)
+                else if(diff > 0 && res[j].second == 0 && res[i].first < res[j].first + 1)  
                 {
-                     if(dp[j] < dp[k] + 1)
-                     {
-                         dp[j] = dp[k] + 1;
-                         flag[j] = 2;
-                     }
+                    res[i].first =  res[j].first + 1;
+                    res[i].second = 1;
+
+                }
+                else if(diff<0 && res[j].second == 1 && res[i].first < res[j].first + 1) {
+                    res[i].first =  res[j].first + 1;
+                    res[i].second = 0;
                     
                 }
-                
+                maximum = max(maximum,res[i].first);
             }
-            ans=  max(ans,dp[j]);
+         cout<<res[i].first<<" "<<res[i].second<<endl;
+
+            
         }
-        return ans;
+        return maximum+1;
+        
     }
 };
