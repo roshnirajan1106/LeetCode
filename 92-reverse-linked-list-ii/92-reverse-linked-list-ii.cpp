@@ -10,68 +10,58 @@
  */
 class Solution {
 public:
-    void print(ListNode*head)
+    ListNode* reverse(ListNode*left,ListNode*right)
     {
-        while(head)
+        ListNode*prev = NULL;
+        while(left != right)
         {
-            cout<<head->val;
-            cout<<endl;
-            head = head->next;
+            ListNode*x = left->next;
+            left->next= prev;
+            prev = left;
+            left = x;
         }
-    }
-    ListNode*reverse(ListNode*head, ListNode*tail,ListNode*prev)
-    {
-        tail->next = NULL;
-        while(head != NULL)
-        {
-            ListNode*node = head->next;
-            head->next = prev;
-            prev = head;
-            head = node;
-            
-        }
-       // print(tail);
-        return tail;
+        left->next = prev;
+        return left;
     }
     ListNode* reverseBetween(ListNode* head, int l, int r) {
-        int i = 0;
         ListNode*left = NULL;
-        ListNode*prev = NULL;
         ListNode*right = NULL;
-        ListNode*temp = head;
-        while(temp )
+        ListNode*t = head;
+        l--;
+        ListNode*prev = NULL;
+        ListNode*next = NULL;
+        while(l--)
         {
-            if(i == l-1)
-            {
-                left = temp;
-                break;
-            }
-                
-            prev = temp;
-            temp = temp->next;
-            i++;
+            prev = t;
+            t = t->next;
         }
-        
-        temp =head;
-        i = 0;
-        while(temp)
+        left = t;
+        t = head;
+        r--;
+        while(r--)
         {
-            if(i ==r-1 ){
-                right = temp;
-                break;
-            }
-                
+            t = t ->next;
             
-            temp = temp->next;
-            i++;
         }
-        ListNode* nextNode = right->next;
-       
-        ListNode*node = reverse(left,right,nextNode);
+        right =t;
+        next = t->next;
+        ListNode * n = reverse(left,right);
         if(prev == NULL)
-            return node;
-        prev->next= node;
+        {
+            head = n;
+            while(n ->next )
+            {
+                n = n->next;
+            }
+            n ->next = next;
+        }
+        else{
+            prev->next = n;
+            while(n ->next)
+                n = n ->next;
+            
+            n->next = next;
+        }
         return head;
-        
     }
 };
