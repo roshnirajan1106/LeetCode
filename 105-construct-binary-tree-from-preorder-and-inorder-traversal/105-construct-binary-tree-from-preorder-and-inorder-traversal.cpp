@@ -11,29 +11,34 @@
  */
 class Solution {
 public:
-    TreeNode * build(vector<int>& preorder, vector<int>& inorder,int s, int e, int &pos)
+    TreeNode* build(int s, int e, vector<int>&preorder,vector<int>&inorder,int &pos)
     {
+        
         if(s > e)
             return NULL;
+        if(pos == preorder.size())
+            return NULL;
         
-        TreeNode*root = new TreeNode(preorder[pos]);
-        int i ;
-        for(i = s; i<=e;i++)
+        TreeNode* node = new TreeNode(preorder[pos]);
+        
+        int idx = 0;
+        for(int j = s;j<=e;j++)
         {
-            if(preorder[pos] == inorder[i])
+            if(inorder[j] == preorder[pos])
+            {
+                idx = j;
                 break;
+            }
         }
-        pos ++;
-        root->left = build(preorder,inorder,s,i-1,pos);
-        root->right = build(preorder,inorder,i+1,e,pos);
-        return root;
-        
+        pos++;
+        node->left = build(s,idx-1,preorder,inorder,pos);
+        node->right = build(idx+1,e,preorder,inorder,pos);
+        return node;
     }
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        int s = 0;
-        int e = inorder.size()-1;
+        int s= 0;
+        int e = preorder.size()-1;
         int pos = 0;
-        return build(preorder,inorder,s,e,pos);
-        
+        return build(s,e,preorder,inorder,pos);
     }
 };
