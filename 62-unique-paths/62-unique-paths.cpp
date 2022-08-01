@@ -5,7 +5,6 @@ public:
         for(int i = 0;i<m;i++)
         {
             dp[i][0] = 1;
-            
         }
         for(int j = 0;j<n;j++)
         {
@@ -20,5 +19,4 @@ public:
         }
         return dp[m-1][n-1];
     }
-    
 };
